@@ -103,39 +103,39 @@ function wps_image_optimalization_section_callback()
 function wps_image_optimalization_retain_original_render()
 {
     $options = get_option('wps_image_optimalization_settings');
-?>
+    ?>
     <label for="retain_original">
         <input type='checkbox' name='wps_image_optimalization_settings[retain_original]' <?php checked(isset($options['retain_original'])); ?> value='1'>
         <?php _e('Check if you want to keep the original file without optimization.', 'wps-image-optimalization'); ?>
     </label>
     <p class="description"><?php _e('If unchecked, the original image will be deleted after successful conversion to WebP, saving disk space.', 'wps-image-optimalization'); ?></p>
-<?php
+    <?php
 }
 
 function wps_image_optimalization_quality_render()
 {
     $options = get_option('wps_image_optimalization_settings');
     $quality = isset($options['quality']) ? intval($options['quality']) : 80;
-?>
+    ?>
     <label for="quality">
         <input type='number' name='wps_image_optimalization_settings[quality]' value='<?php echo esc_attr($quality); ?>' min='0' max='100' step='1'>
         <?php _e('Image quality after optimization (0-100). Higher quality takes up more storage. (0 - lowest, 100 - highest quality)', 'wps-image-optimalization'); ?>
     </label>
     <p class="description"><?php _e('The default value is 80.', 'wps-image-optimalization'); ?></p>
-<?php
+    <?php
 }
 
 function wps_image_optimalization_method_render()
 {
     $options = get_option('wps_image_optimalization_settings');
     $method = isset($options['method']) ? intval($options['method']) : 6;
-?>
+    ?>
     <label for="method">
         <input type='number' name='wps_image_optimalization_settings[method]' value='<?php echo esc_attr($method); ?>' min='0' max='6' step='1'>
         <?php _e('Image optimization (0-6).', 'wps-image-optimalization'); ?>
     </label>
     <p class="description"><?php _e('Higher value = greater image compression, which also means longer processing time during optimization.', 'wps-image-optimalization'); ?></p>
-<?php
+    <?php
 }
 
 function wps_image_optimalization_allowed_types_render()
@@ -143,50 +143,50 @@ function wps_image_optimalization_allowed_types_render()
     $options = get_option('wps_image_optimalization_settings');
     $allowed_types = isset($options['allowed_types']) ? $options['allowed_types'] : ['image/jpeg', 'image/png', 'image/gif'];
     $all_types = ['image/jpeg', 'image/png', 'image/gif', 'image/bmp', 'image/tiff', 'image/svg+xml'];
-?>
+    ?>
     <p><?php _e('Images to be optimized:', 'wps-image-optimalization'); ?></p>
     <?php
     foreach ($all_types as $type) {
-    ?>
+        ?>
         <label for="allowed_types">
             <input type='checkbox' name='wps_image_optimalization_settings[allowed_types][]' <?php checked(in_array($type, $allowed_types)); ?> value='<?php echo esc_attr($type); ?>'>
             <?php echo esc_html($type); ?>
         </label><br>
-    <?php
+        <?php
     }
     ?>
     <p class="description"><?php _e('The default images are JPEG, PNG, and GIF. Select other types if necessary. SVG files usually take up little space and do not need to be optimized.', 'wps-image-optimalization'); ?></p>
-<?php
+    <?php
 }
 
 function wps_image_optimalization_set_alt_text_render()
 {
     $options = get_option('wps_image_optimalization_settings');
-?>
+    ?>
     <label for="set_alt_text">
         <input type='checkbox' name='wps_image_optimalization_settings[set_alt_text]' <?php checked(isset($options['set_alt_text'])); ?> value='1'>
         <?php _e('Check to automatically set image alt text based on the filename.', 'wps-image-optimalization'); ?>
     </label>
     <p class="description"><?php _e('If you have SEO-friendly image titles, you can enable this option. Otherwise, leave the feature disabled.', 'wps-image-optimalization'); ?></p>
-<?php
+    <?php
 }
 
 function wps_image_optimalization_max_width_render()
 {
     $options = get_option('wps_image_optimalization_settings');
     $max_width = isset($options['max_width']) ? intval($options['max_width']) : 1200;
-?>
+    ?>
     <label for="max_width">
         <input type='number' name='wps_image_optimalization_settings[max_width]' value='<?php echo esc_attr($max_width); ?>' min='0' step='1'>
         <?php _e('Set the maximum width for uploaded images (in pixels).', 'wps-image-optimalization'); ?>
     </label>
     <p class="description"><?php _e('Images wider than this value will be resized before further optimization. The default value is 1200 pixels.', 'wps-image-optimalization'); ?></p>
-<?php
+    <?php
 }
 
 function wps_image_optimalization_settings_page()
 {
-?>
+    ?>
     <div class="wrap">
         <h1><?php _e('Wps Image Optimalization Settings', 'wps-image-optimalization'); ?></h1>
         <form action='options.php' method='post'>
@@ -197,7 +197,7 @@ function wps_image_optimalization_settings_page()
             ?>
         </form>
     </div>
-<?php
+    <?php
 }
 
 // Disable WordPress default image sizes and back-sizing
