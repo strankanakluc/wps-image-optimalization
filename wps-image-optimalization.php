@@ -26,7 +26,8 @@ function wps_image_optimalization_menu()
 // Enqueue admin styles
 add_action('admin_enqueue_scripts', 'wps_image_optimalization_enqueue_admin_styles');
 
-function wps_image_optimalization_enqueue_admin_styles($hook_suffix) {
+function wps_image_optimalization_enqueue_admin_styles($hook_suffix)
+{
     if ($hook_suffix == 'settings_page_wps-image-optimalization') {
         wp_enqueue_style('wps-image-optimalization-admin', plugin_dir_url(__FILE__) . 'wps-image-optimalization-admin.css');
     }
@@ -314,7 +315,7 @@ function wps_image_optimalization_handle_upload($upload)
 // Hook into the image upload process to set alt text
 add_action('add_attachment', 'wps_image_optimalization_set_image_alt_text_on_upload');
 
-function wps_image_optimalization_set_image_alt_text_on_upload($post_ID)
+function wps_image_optimalization_set_image_alt_text_on_upload($postId)
 {
     // Get the plugin settings
     $options = get_option('wps_image_optimalization_settings');
@@ -323,10 +324,10 @@ function wps_image_optimalization_set_image_alt_text_on_upload($post_ID)
     // Check if the setting to automatically set alt text is enabled
     if ($set_alt_text) {
         // Get the attachment post
-        $attachment = get_post($post_ID);
+        $attachment = get_post($postId);
 
         // Ensure it's an image
-        if (wp_attachment_is_image($post_ID)) {
+        if (wp_attachment_is_image($postId)) {
             // Get the attachment's title
             $title = $attachment->post_title;
 
@@ -337,7 +338,7 @@ function wps_image_optimalization_set_image_alt_text_on_upload($post_ID)
             $alt_text = ucfirst(strtolower($title));
 
             // Update the attachment post meta with the new alt text
-            update_post_meta($post_ID, '_wp_attachment_image_alt', $alt_text);
+            update_post_meta($postId, '_wp_attachment_image_alt', $alt_text);
         }
     }
 }
