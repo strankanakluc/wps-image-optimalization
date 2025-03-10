@@ -1,3 +1,4 @@
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/c5ecfff943994157b1b15346f4afea9a)](https://app.codacy.com/gh/strankanakluc/wps-image-optimalization?utm_source=github.com&utm_medium=referral&utm_content=strankanakluc/wps-image-optimalization&utm_campaign=Badge_Grade)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/f1f87b64a2474aa7bbd1b62007d17c8b)](https://app.codacy.com/gh/strankanakluc/wps-image-optimalization/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 # WPS Image Optimalization
 
