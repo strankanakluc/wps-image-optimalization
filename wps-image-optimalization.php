@@ -6,10 +6,10 @@
  * Author: WPS
  * Author URI: https://wps.sk
  * Version: 1.1.0
+ * License: GPL-2.0+
  * @category Plugin
  * @package  WPS_Image_Optimalization
  * @link     https://wps.sk
- * @license  GPL v3
  * @php      7.4
  */
 
@@ -59,7 +59,7 @@ add_action('admin_init', 'Wps_Image_Optimalization_Settings_init');
  */
 function Wps_Image_Optimalization_Settings_init()
 {
-    register_setting('wps_image_optimalization_settings', 'wps_image_optimalization_settings');
+    register_setting('wps_image_optimalization_settings', 'wps_image_optimalization_settings', 'wps_image_optimalization_sanitize_settings');
 
     add_settings_section(
         'wps_image_optimalization_main_settings',
@@ -115,6 +115,44 @@ function Wps_Image_Optimalization_Settings_init()
         'wps_image_optimalization_settings',
         'wps_image_optimalization_main_settings'
     );
+}
+
+/**
+ * Sanitize settings
+ *
+ * @param array $input The input to sanitize
+ *
+ * @return array The sanitized input
+ */
+function wps_image_optimalization_sanitize_settings($input)
+{
+    $sanitized = array();
+
+    if (isset($input['retain_original'])) {
+        $sanitized['retain_original'] = intval($input['retain_original']);
+    }
+
+    if (isset($input['quality'])) {
+        $sanitized['quality'] = intval($input['quality']);
+    }
+
+    if (isset($input['method'])) {
+        $sanitized['method'] = intval($input['method']);
+    }
+
+    if (isset($input['allowed_types']) && is_array($input['allowed_types'])) {
+        $sanitized['allowed_types'] = array_map('sanitize_text_field', $input['allowed_types']);
+    }
+
+    if (isset($input['set_alt_text'])) {
+        $sanitized['set_alt_text'] = intval($input['set_alt_text']);
+    }
+
+    if (isset($input['max_width'])) {
+        $sanitized['max_width'] = intval($input['max_width']);
+    }
+
+    return $sanitized;
 }
 
 /**
