@@ -10,6 +10,7 @@
  * @package  WPS_Image_Optimalization
  * @link     https://wps.sk
  * @license  GPL v3
+ * @php      7.4
  */
 
 // Add menu item to Settings
@@ -386,6 +387,7 @@ function Wps_Image_Optimalization_Handle_upload($upload)
             }
             error_log("Image optimalization failed for: " . $filePath);
         }
+        return $upload;
     }
 
     return $upload;
