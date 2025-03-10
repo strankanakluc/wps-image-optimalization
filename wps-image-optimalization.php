@@ -7,9 +7,9 @@
  * Author URI: https://wps.sk
  * Version: 1.1.0
  * @category Plugin
- * @package WPS_Image_Optimalization
- * @link https://wps.sk
- * @license GPL v3
+ * @package  WPS_Image_Optimalization
+ * @link     https://wps.sk
+ * @license  GPL v3
  */
 
 // Add menu item to Settings
@@ -38,6 +38,7 @@ add_action('admin_enqueue_scripts', 'Wps_Image_Optimalization_Enqueue_Admin_styl
  * Enqueue admin styles
  *
  * @param string $hookSuffix The suffix for the hook
+ *
  * @return void
  */
 function Wps_Image_Optimalization_Enqueue_Admin_styles($hookSuffix)
@@ -264,6 +265,7 @@ function Wps_Image_Optimalization_Settings_page()
  * Disable WordPress default image sizes and back-sizing
  *
  * @param array $sizes The sizes of the images
+ *
  * @return array
  */
 function Disable_Default_Image_sizes($sizes)
@@ -302,6 +304,7 @@ add_filter('wp_handle_upload', 'Wps_Image_Optimalization_Handle_upload');
  * Convert images to WebP upon upload
  *
  * @param array $upload The uploaded file
+ *
  * @return array
  */
 function Wps_Image_Optimalization_Handle_upload($upload)
@@ -395,6 +398,7 @@ add_action('add_attachment', 'Wps_Image_Optimalization_Set_Image_Alt_Text_On_upl
  * Set image alt text based on filename
  *
  * @param int $postId The post ID
+ *
  * @return void
  */
 function Wps_Image_Optimalization_Set_Image_Alt_Text_On_upload($postId)
