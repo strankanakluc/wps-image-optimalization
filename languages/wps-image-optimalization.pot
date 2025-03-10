@@ -1,0 +1,100 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: WPS Image Optimalization 1.1.0\n"
+"PO-Revision-Date: 2025-03-10 01:42:03+0000\n"
+"Last-Translator: Dušan Straka \n"
+"Language-Team: NONE \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.0\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-KeywordsList: __;_e\n"
+
+#: wps-image-optimalization.php:25
+msgid "Wps Image Optimalization Settings"
+msgstr ""
+
+#: wps-image-optimalization.php:26
+msgid "Wps Image Optimalization"
+msgstr ""
+
+#: wps-image-optimalization.php:38
+msgid "Settings"
+msgstr ""
+
+#: wps-image-optimalization.php:46
+msgid "Also keep the original image"
+msgstr ""
+
+#: wps-image-optimalization.php:47
+msgid "Check if you want to keep the original file without optimization."
+msgstr ""
+
+#: wps-image-optimalization.php:48
+msgid "If unchecked, the original image will be deleted after successful conversion to WebP, saving disk space."
+msgstr ""
+
+#: wps-image-optimalization.php:54
+msgid "Image Quality"
+msgstr ""
+
+#: wps-image-optimalization.php:55
+msgid "Image quality after optimization (0-100). Higher quality takes up more storage. (0 - lowest, 100 - highest quality)"
+msgstr ""
+
+#: wps-image-optimalization.php:56
+msgid "The default value is 80."
+msgstr ""
+
+#: wps-image-optimalization.php:62
+msgid "Compression Method"
+msgstr ""
+
+#: wps-image-optimalization.php:63
+msgid "Image optimization (0-6)."
+msgstr ""
+
+#: wps-image-optimalization.php:64
+msgid "Higher value = greater image compression, which also means longer processing time during optimization."
+msgstr ""
+
+#: wps-image-optimalization.php:70
+msgid "Allowed Image Types"
+msgstr ""
+
+#: wps-image-optimalization.php:71
+msgid "Images to be optimized:"
+msgstr ""
+
+#: wps-image-optimalization.php:78
+msgid "The default images are JPEG, PNG, and GIF. Select other types if necessary. SVG files usually take up little space and do not need to be optimized."
+msgstr ""
+
+#: wps-image-optimalization.php:84
+msgid "Copy file name to alt text"
+msgstr ""
+
+#: wps-image-optimalization.php:85
+msgid "Check to automatically set image alt text based on the filename."
+msgstr ""
+
+#: wps-image-optimalization.php:86
+msgid "If you have SEO-friendly image titles, you can enable this option. Otherwise, leave the feature disabled."
+msgstr ""
+
+#: wps-image-optimalization.php:92
+msgid "Maximum Image Width"
+msgstr ""
+
+#: wps-image-optimalization.php:93
+msgid "Set the maximum width for uploaded images (in pixels)."
+msgstr ""
+
+#: wps-image-optimalization.php:94
+msgid "Images wider than this value will be resized before further optimization. The default value is 1200 pixels."
+msgstr ""
+
+#: wps-image-optimalization.php:100
+msgid "Optimizes images when uploading. Define the maximum image size and choose which file types should be converted to webp and what the compression or quality of the optimized image should be."
+msgstr ""
