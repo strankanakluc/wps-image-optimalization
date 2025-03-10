@@ -8,7 +8,9 @@
  * Version: 1.1.0
  * License: GPL v3
  * @category Plugin
- * @author WPS
+ * @package WPS_Image_Optimalization
+ * @link https://wps.sk
+ * 
  * @license GPL v3
  */
 
@@ -33,6 +35,7 @@ add_action('admin_enqueue_scripts', 'Wps_Image_Optimalization_Enqueue_Admin_Styl
  * Enqueue admin styles
  *
  * @param string $hookSuffix
+ * @return void
  */
 function Wps_Image_Optimalization_Enqueue_Admin_Styles($hookSuffix)
 {
@@ -46,6 +49,8 @@ add_action('admin_init', 'Wps_Image_Optimalization_Settings_Init');
 
 /**
  * Register settings
+ *
+ * @return void
  */
 function Wps_Image_Optimalization_Settings_Init()
 {
@@ -109,6 +114,8 @@ function Wps_Image_Optimalization_Settings_Init()
 
 /**
  * Section callback
+ *
+ * @return void
  */
 function Wps_Image_Optimalization_Section_Callback()
 {
@@ -117,6 +124,8 @@ function Wps_Image_Optimalization_Section_Callback()
 
 /**
  * Render retain original setting
+ *
+ * @return void
  */
 function Wps_Image_Optimalization_Retain_Original_Render()
 {
@@ -132,6 +141,8 @@ function Wps_Image_Optimalization_Retain_Original_Render()
 
 /**
  * Render quality setting
+ *
+ * @return void
  */
 function Wps_Image_Optimalization_Quality_Render()
 {
@@ -148,6 +159,8 @@ function Wps_Image_Optimalization_Quality_Render()
 
 /**
  * Render method setting
+ *
+ * @return void
  */
 function Wps_Image_Optimalization_Method_Render()
 {
@@ -164,6 +177,8 @@ function Wps_Image_Optimalization_Method_Render()
 
 /**
  * Render allowed types setting
+ *
+ * @return void
  */
 function Wps_Image_Optimalization_Allowed_Types_Render()
 {
@@ -188,6 +203,8 @@ function Wps_Image_Optimalization_Allowed_Types_Render()
 
 /**
  * Render set alt text setting
+ *
+ * @return void
  */
 function Wps_Image_Optimalization_Set_Alt_Text_Render()
 {
@@ -203,6 +220,8 @@ function Wps_Image_Optimalization_Set_Alt_Text_Render()
 
 /**
  * Render max width setting
+ *
+ * @return void
  */
 function Wps_Image_Optimalization_Max_Width_Render()
 {
@@ -219,6 +238,8 @@ function Wps_Image_Optimalization_Max_Width_Render()
 
 /**
  * Settings page
+ *
+ * @return void
  */
 function Wps_Image_Optimalization_Settings_Page()
 {
@@ -255,6 +276,8 @@ add_filter('intermediate_image_sizes_advanced', 'Disable_Default_Image_Sizes');
 
 /**
  * Disable additional image sizes
+ *
+ * @return void
  */
 function Disable_Additional_Image_Sizes()
 {
@@ -327,7 +350,7 @@ function Wps_Image_Optimalization_Handle_Upload($upload)
                 if (!is_wp_error($imageEditor)) {
                     $newFilePath = $fileInfo['dirname'] . '/' . wp_unique_filename($fileInfo['dirname'], $fileInfo['filename'] . '.webp');
 
-                    $savedImage = $imageEditor->save($newFilePath, 'image/webp', array('quality' => $quality));
+                    $imageEditor->save($newFilePath, 'image/webp', array('quality' => $quality));
                 }
             } else {
                 error_log("No suitable image library (ImageMagick or GD) found for WebP optimalization.");
@@ -351,10 +374,11 @@ function Wps_Image_Optimalization_Handle_Upload($upload)
                     wp_insert_attachment($attachment, $filePath);
                 } elseif (file_exists($filePath)) {
                     @unlink($filePath); // Delete the original image if not retained
+                    return $upload;
                 }
-            } else {
-                error_log("Image optimalization failed for: " . $filePath);
+                return $upload;
             }
+            error_log("Image optimalization failed for: " . $filePath);
         }
     }
 
@@ -368,6 +392,7 @@ add_action('add_attachment', 'Wps_Image_Optimalization_Set_Image_Alt_Text_On_Upl
  * Set image alt text based on filename
  *
  * @param int $postId
+ * @return void
  */
 function Wps_Image_Optimalization_Set_Image_Alt_Text_On_Upload($postId)
 {
