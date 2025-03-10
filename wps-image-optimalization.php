@@ -7,6 +7,9 @@
  * Author URI: https://wps.sk
  * Version: 1.1.0
  * License: GPL v3
+ * @category Plugin
+ * @author WPS
+ * @license GPL v3
  */
 
 // Add menu item to Settings
@@ -26,6 +29,11 @@ function Wps_Image_Optimalization_Menu()
 // Enqueue admin styles
 add_action('admin_enqueue_scripts', 'Wps_Image_Optimalization_Enqueue_Admin_Styles');
 
+/**
+ * Enqueue admin styles
+ *
+ * @param string $hookSuffix
+ */
 function Wps_Image_Optimalization_Enqueue_Admin_Styles($hookSuffix)
 {
     if ($hookSuffix == 'settings_page_wps-image-optimalization') {
@@ -36,6 +44,9 @@ function Wps_Image_Optimalization_Enqueue_Admin_Styles($hookSuffix)
 // Register settings
 add_action('admin_init', 'Wps_Image_Optimalization_Settings_Init');
 
+/**
+ * Register settings
+ */
 function Wps_Image_Optimalization_Settings_Init()
 {
     register_setting('wps_image_optimalization_settings', 'wps_image_optimalization_settings');
@@ -96,11 +107,17 @@ function Wps_Image_Optimalization_Settings_Init()
     );
 }
 
+/**
+ * Section callback
+ */
 function Wps_Image_Optimalization_Section_Callback()
 {
     echo '<p>' . __('Optimizes images when uploading. Define the maximum image size and choose which file types should be converted to webp and what the compression or quality of the optimized image should be.', 'wps-image-optimalization') . '</p>';
 }
 
+/**
+ * Render retain original setting
+ */
 function Wps_Image_Optimalization_Retain_Original_Render()
 {
     $options = get_option('wps_image_optimalization_settings');
@@ -113,6 +130,9 @@ function Wps_Image_Optimalization_Retain_Original_Render()
     <?php
 }
 
+/**
+ * Render quality setting
+ */
 function Wps_Image_Optimalization_Quality_Render()
 {
     $options = get_option('wps_image_optimalization_settings');
@@ -126,6 +146,9 @@ function Wps_Image_Optimalization_Quality_Render()
     <?php
 }
 
+/**
+ * Render method setting
+ */
 function Wps_Image_Optimalization_Method_Render()
 {
     $options = get_option('wps_image_optimalization_settings');
@@ -139,18 +162,21 @@ function Wps_Image_Optimalization_Method_Render()
     <?php
 }
 
+/**
+ * Render allowed types setting
+ */
 function Wps_Image_Optimalization_Allowed_Types_Render()
 {
     $options = get_option('wps_image_optimalization_settings');
-    $allowed_types = isset($options['allowed_types']) ? $options['allowed_types'] : ['image/jpeg', 'image/png', 'image/gif'];
-    $all_types = ['image/jpeg', 'image/png', 'image/gif', 'image/bmp', 'image_tiff', 'image/svg+xml'];
+    $allowedTypes = isset($options['allowed_types']) ? $options['allowed_types'] : ['image/jpeg', 'image/png', 'image/gif'];
+    $allTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/bmp', 'image_tiff', 'image/svg+xml'];
     ?>
     <p><?php _e('Images to be optimized:', 'wps-image-optimalization'); ?></p>
     <?php
-    foreach ($all_types as $type) {
+    foreach ($allTypes as $type) {
         ?>
         <label for="allowed_types">
-            <input type='checkbox' name='wps_image_optimalization_settings[allowed_types][]' <?php checked(in_array($type, $allowed_types)); ?> value='<?php echo esc_attr($type); ?>'>
+            <input type='checkbox' name='wps_image_optimalization_settings[allowed_types][]' <?php checked(in_array($type, $allowedTypes)); ?> value='<?php echo esc_attr($type); ?>'>
             <?php echo esc_html($type); ?>
         </label><br>
         <?php
@@ -160,6 +186,9 @@ function Wps_Image_Optimalization_Allowed_Types_Render()
     <?php
 }
 
+/**
+ * Render set alt text setting
+ */
 function Wps_Image_Optimalization_Set_Alt_Text_Render()
 {
     $options = get_option('wps_image_optimalization_settings');
@@ -172,19 +201,25 @@ function Wps_Image_Optimalization_Set_Alt_Text_Render()
     <?php
 }
 
+/**
+ * Render max width setting
+ */
 function Wps_Image_Optimalization_Max_Width_Render()
 {
     $options = get_option('wps_image_optimalization_settings');
-    $max_width = isset($options['max_width']) ? intval($options['max_width']) : 1200;
+    $maxWidth = isset($options['max_width']) ? intval($options['max_width']) : 1200;
     ?>
     <label for="max_width">
-        <input type='number' name='wps_image_optimalization_settings[max_width]' value='<?php echo esc_attr($max_width); ?>' min='0' step='1'>
+        <input type='number' name='wps_image_optimalization_settings[max_width]' value='<?php echo esc_attr($maxWidth); ?>' min='0' step='1'>
         <?php _e('Set the maximum width for uploaded images (in pixels).', 'wps-image-optimalization'); ?>
     </label>
     <p class="description"><?php _e('Images wider than this value will be resized before further optimization. The default value is 1200 pixels.', 'wps-image-optimalization'); ?></p>
     <?php
 }
 
+/**
+ * Settings page
+ */
 function Wps_Image_Optimalization_Settings_Page()
 {
     ?>
@@ -201,7 +236,12 @@ function Wps_Image_Optimalization_Settings_Page()
     <?php
 }
 
-// Disable WordPress default image sizes and back-sizing
+/**
+ * Disable WordPress default image sizes and back-sizing
+ *
+ * @param array $sizes
+ * @return array
+ */
 function Disable_Default_Image_Sizes($sizes)
 {
     unset($sizes['thumbnail']);      // Remove Thumbnail size
@@ -213,6 +253,9 @@ function Disable_Default_Image_Sizes($sizes)
 }
 add_filter('intermediate_image_sizes_advanced', 'Disable_Default_Image_Sizes');
 
+/**
+ * Disable additional image sizes
+ */
 function Disable_Additional_Image_Sizes()
 {
     remove_image_size('1536x1536');  // Remove 2x medium-large size
@@ -229,37 +272,43 @@ if (!isset($content_width)) {
 // Hook into the image upload process to convert images to WebP
 add_filter('wp_handle_upload', 'Wps_Image_Optimalization_Handle_Upload');
 
+/**
+ * Convert images to WebP upon upload
+ *
+ * @param array $upload
+ * @return array
+ */
 function Wps_Image_Optimalization_Handle_Upload($upload)
 {
     $options = get_option('wps_image_optimalization_settings');
-    $retain_original = isset($options['retain_original']) ? $options['retain_original'] : false;
+    $retainOriginal = isset($options['retain_original']) ? $options['retain_original'] : false;
     $quality = isset($options['quality']) ? intval($options['quality']) : 80;
     $method = isset($options['method']) ? intval($options['method']) : 6;
-    $max_width = isset($options['max_width']) ? intval($options['max_width']) : 1200;
+    $maxWidth = isset($options['max_width']) ? intval($options['max_width']) : 1200;
 
     // Define allowed image types
-    $allowed_types = isset($options['allowed_types']) && !empty($options['allowed_types']) ? $options['allowed_types'] : ['image/jpeg', 'image/png', 'image/gif'];
+    $allowedTypes = isset($options['allowed_types']) && !empty($options['allowed_types']) ? $options['allowed_types'] : ['image/jpeg', 'image/png', 'image/gif'];
 
-    if (in_array($upload['type'], $allowed_types, true)) {
-        $file_path = $upload['file'];
-        $file_info = pathinfo($file_path);
+    if (in_array($upload['type'], $allowedTypes, true)) {
+        $filePath = $upload['file'];
+        $fileInfo = pathinfo($filePath);
 
         // Only convert the original full-size image
-        if (strpos($file_path, '-scaled') === false && !preg_match('/-\d+x\d+\./', $file_path)) {
+        if (strpos($filePath, '-scaled') === false && !preg_match('/-\d+x\d+\./', $filePath)) {
 
             // Resize image if it exceeds the maximum width
-            $image_editor = wp_get_image_editor($file_path);
-            if (!is_wp_error($image_editor)) {
-                $image_size = $image_editor->get_size();
-                if ($image_size['width'] > $max_width) {
-                    $image_editor->resize($max_width, null);
-                    $image_editor->save($file_path);
+            $imageEditor = wp_get_image_editor($filePath);
+            if (!is_wp_error($imageEditor)) {
+                $imageSize = $imageEditor->get_size();
+                if ($imageSize['width'] > $maxWidth) {
+                    $imageEditor->resize($maxWidth, null);
+                    $imageEditor->save($filePath);
                 }
             }
 
             // Check if ImageMagick or GD is available
             if (extension_loaded('imagick')) {
-                $image = new Imagick($file_path);
+                $image = new Imagick($filePath);
 
                 // Set WebP compression quality and method
                 $image->setImageFormat('webp');
@@ -268,43 +317,43 @@ function Wps_Image_Optimalization_Handle_Upload($upload)
 
                 $image->stripImage();
 
-                $new_file_path = $file_info['dirname'] . '/' . wp_unique_filename($file_info['dirname'], $file_info['filename'] . '.webp');
+                $newFilePath = $fileInfo['dirname'] . '/' . wp_unique_filename($fileInfo['dirname'], $fileInfo['filename'] . '.webp');
 
-                $image->writeImage($new_file_path);
+                $image->writeImage($newFilePath);
                 $image->clear();
                 $image->destroy();
             } elseif (extension_loaded('gd')) {
-                $image_editor = wp_get_image_editor($file_path);
-                if (!is_wp_error($image_editor)) {
-                    $new_file_path = $file_info['dirname'] . '/' . wp_unique_filename($file_info['dirname'], $file_info['filename'] . '.webp');
+                $imageEditor = wp_get_image_editor($filePath);
+                if (!is_wp_error($imageEditor)) {
+                    $newFilePath = $fileInfo['dirname'] . '/' . wp_unique_filename($fileInfo['dirname'], $fileInfo['filename'] . '.webp');
 
-                    $saved_image = $image_editor->save($new_file_path, 'image/webp', array('quality' => $quality));
+                    $savedImage = $imageEditor->save($newFilePath, 'image/webp', array('quality' => $quality));
                 }
             } else {
                 error_log("No suitable image library (ImageMagick or GD) found for WebP optimalization.");
                 return $upload;
             }
 
-            if (isset($new_file_path) && file_exists($new_file_path)) {
-                $upload['file'] = $new_file_path;
-                $upload['url'] = str_replace(basename($upload['url']), basename($new_file_path), $upload['url']);
+            if (isset($newFilePath) && file_exists($newFilePath)) {
+                $upload['file'] = $newFilePath;
+                $upload['url'] = str_replace(basename($upload['url']), basename($newFilePath), $upload['url']);
                 $upload['type'] = 'image/webp';
 
                 // If retaining original, register it with the media library
-                if ($retain_original) {
+                if ($retainOriginal) {
                     $attachment = array(
                         'guid' => $upload['url'],
                         'post_mime_type' => $upload['type'],
-                        'post_title' => preg_replace('/\.[^.]+$/', '', basename($file_path)),
+                        'post_title' => preg_replace('/\.[^.]+$/', '', basename($filePath)),
                         'post_content' => '',
                         'post_status' => 'inherit',
                     );
-                    wp_insert_attachment($attachment, $file_path);
-                } elseif (file_exists($file_path)) {
-                    @unlink($file_path); // Delete the original image if not retained
+                    wp_insert_attachment($attachment, $filePath);
+                } elseif (file_exists($filePath)) {
+                    @unlink($filePath); // Delete the original image if not retained
                 }
             } else {
-                error_log("Image optimalization failed for: " . $file_path);
+                error_log("Image optimalization failed for: " . $filePath);
             }
         }
     }
@@ -315,14 +364,19 @@ function Wps_Image_Optimalization_Handle_Upload($upload)
 // Hook into the image upload process to set alt text
 add_action('add_attachment', 'Wps_Image_Optimalization_Set_Image_Alt_Text_On_Upload');
 
+/**
+ * Set image alt text based on filename
+ *
+ * @param int $postId
+ */
 function Wps_Image_Optimalization_Set_Image_Alt_Text_On_Upload($postId)
 {
     // Get the plugin settings
     $options = get_option('wps_image_optimalization_settings');
-    $set_alt_text = isset($options['set_alt_text']) ? $options['set_alt_text'] : false;
+    $setAltText = isset($options['set_alt_text']) ? $options['set_alt_text'] : false;
 
     // Check if the setting to automatically set alt text is enabled
-    if ($set_alt_text) {
+    if ($setAltText) {
         // Get the attachment post
         $attachment = get_post($postId);
 
@@ -335,10 +389,10 @@ function Wps_Image_Optimalization_Set_Image_Alt_Text_On_Upload($postId)
             $title = str_replace('-', ' ', $title);
 
             // Convert to sentence case
-            $alt_text = ucfirst(strtolower($title));
+            $altText = ucfirst(strtolower($title));
 
             // Update the attachment post meta with the new alt text
-            update_post_meta($postId, '_wp_attachment_image_alt', $alt_text);
+            update_post_meta($postId, '_wp_attachment_image_alt', $altText);
         }
     }
 }
