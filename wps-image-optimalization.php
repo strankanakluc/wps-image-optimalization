@@ -319,75 +319,73 @@ function Wps_Image_Optimalization_Handle_upload($upload)
     // Define allowed image types
     $allowedTypes = isset($options['allowed_types']) && !empty($options['allowed_types']) ? $options['allowed_types'] : ['image/jpeg', 'image/png', 'image/gif'];
 
-    if (in_array($upload['type'], $allowedTypes, true)) {
-        $filePath = $upload['file'];
-        $fileInfo = pathinfo($filePath);
-
-        // Only convert the original full-size image
-        if (strpos($filePath, '-scaled') === false && !preg_match('/-\d+x\d+\./', $filePath)) {
-
-            // Resize image if it exceeds the maximum width
-            $imageEditor = wp_get_image_editor($filePath);
-            if (!is_wp_error($imageEditor)) {
-                $imageSize = $imageEditor->get_size();
-                if ($imageSize['width'] > $maxWidth) {
-                    $imageEditor->resize($maxWidth, null);
-                    $imageEditor->save($filePath);
-                }
-            }
-
-            // Check if ImageMagick or GD is available
-            if (extension_loaded('imagick')) {
-                $image = new Imagick($filePath);
-
-                // Set WebP compression quality and method
-                $image->setImageFormat('webp');
-                $image->setOption('webp:method', $method);
-                $image->setImageCompressionQuality($quality);
-
-                $image->stripImage();
-
-                $newFilePath = $fileInfo['dirname'] . '/' . wp_unique_filename($fileInfo['dirname'], $fileInfo['filename'] . '.webp');
-
-                $image->writeImage($newFilePath);
-                $image->clear();
-                $image->destroy();
-            } elseif (extension_loaded('gd')) {
-                $imageEditor = wp_get_image_editor($filePath);
-                if (!is_wp_error($imageEditor)) {
-                    $newFilePath = $fileInfo['dirname'] . '/' . wp_unique_filename($fileInfo['dirname'], $fileInfo['filename'] . '.webp');
-
-                    $imageEditor->save($newFilePath, 'image/webp', array('quality' => $quality));
-                }
-            } else {
-                error_log("No suitable image library (ImageMagick or GD) found for WebP optimalization.");
-                return $upload;
-            }
-
-            if (isset($newFilePath) && file_exists($newFilePath)) {
-                $upload['file'] = $newFilePath;
-                $upload['url'] = str_replace(basename($upload['url']), basename($newFilePath), $upload['url']);
-                $upload['type'] = 'image/webp';
-
-                // If retaining original, register it with the media library
-                if ($retainOriginal) {
-                    $attachment = array(
-                        'guid' => $upload['url'],
-                        'post_mime_type' => $upload['type'],
-                        'post_title' => preg_replace('/\.[^.]+$/', '', basename($filePath)),
-                        'post_content' => '',
-                        'post_status' => 'inherit',
-                    );
-                    wp_insert_attachment($attachment, $filePath);
-                } elseif (file_exists($filePath)) {
-                    @unlink($filePath); // Delete the original image if not retained
-                    return $upload;
-                }
-                return $upload;
-            }
-            error_log("Image optimalization failed for: " . $filePath);
-        }
+    if (!in_array($upload['type'], $allowedTypes, true)) {
         return $upload;
+    }
+
+    $filePath = $upload['file'];
+    $fileInfo = pathinfo($filePath);
+
+    // Only convert the original full-size image
+    if (strpos($filePath, '-scaled') !== false || preg_match('/-\d+x\d+\./', $filePath)) {
+        return $upload;
+    }
+
+    // Resize image if it exceeds the maximum width
+    $imageEditor = wp_get_image_editor($filePath);
+    if (!is_wp_error($imageEditor)) {
+        $imageSize = $imageEditor->get_size();
+        if ($imageSize['width'] > $maxWidth) {
+            $imageEditor->resize($maxWidth, null);
+            $imageEditor->save($filePath);
+        }
+    }
+
+    $newFilePath = $fileInfo['dirname'] . '/' . wp_unique_filename($fileInfo['dirname'], $fileInfo['filename'] . '.webp');
+
+    // Check if ImageMagick is available
+    if (extension_loaded('imagick')) {
+        $image = new Imagick($filePath);
+
+        // Set WebP compression quality and method
+        $image->setImageFormat('webp');
+        $image->setOption('webp:method', $method);
+        $image->setImageCompressionQuality($quality);
+
+        $image->stripImage();
+        $image->writeImage($newFilePath);
+        $image->clear();
+        $image->destroy();
+    } elseif (extension_loaded('gd')) {
+        // Check if GD is available
+        if (!is_wp_error($imageEditor)) {
+            $imageEditor->save($newFilePath, 'image/webp', array('quality' => $quality));
+        }
+    } else {
+        error_log("No suitable image library (ImageMagick or GD) found for WebP optimalization.");
+        return $upload;
+    }
+
+    if (file_exists($newFilePath)) {
+        $upload['file'] = $newFilePath;
+        $upload['url'] = str_replace(basename($upload['url']), basename($newFilePath), $upload['url']);
+        $upload['type'] = 'image/webp';
+
+        // If retaining original, register it with the media library
+        if ($retainOriginal) {
+            $attachment = array(
+                'guid' => $upload['url'],
+                'post_mime_type' => $upload['type'],
+                'post_title' => preg_replace('/\.[^.]+$/', '', basename($filePath)),
+                'post_content' => '',
+                'post_status' => 'inherit',
+            );
+            wp_insert_attachment($attachment, $filePath);
+        } elseif (file_exists($filePath)) {
+            @unlink($filePath); // Delete the original image if not retained
+        }
+    } else {
+        error_log("Image optimalization failed for: " . $filePath);
     }
 
     return $upload;
@@ -410,24 +408,28 @@ function Wps_Image_Optimalization_Set_Image_Alt_Text_On_upload($postId)
     $setAltText = isset($options['set_alt_text']) ? $options['set_alt_text'] : false;
 
     // Check if the setting to automatically set alt text is enabled
-    if ($setAltText) {
-        // Get the attachment post
-        $attachment = get_post($postId);
-
-        // Ensure it's an image
-        if (wp_attachment_is_image($postId)) {
-            // Get the attachment's title
-            $title = $attachment->post_title;
-
-            // Replace hyphens with spaces
-            $title = str_replace('-', ' ', $title);
-
-            // Convert to sentence case
-            $altText = ucfirst(strtolower($title));
-
-            // Update the attachment post meta with the new alt text
-            update_post_meta($postId, '_wp_attachment_image_alt', $altText);
-        }
+    if (!$setAltText) {
+        return;
     }
+
+    // Get the attachment post
+    $attachment = get_post($postId);
+
+    // Ensure it's an image
+    if (!wp_attachment_is_image($postId)) {
+        return;
+    }
+
+    // Get the attachment's title
+    $title = $attachment->post_title;
+
+    // Replace hyphens with spaces
+    $title = str_replace('-', ' ', $title);
+
+    // Convert to sentence case
+    $altText = ucfirst(strtolower($title));
+
+    // Update the attachment post meta with the new alt text
+    update_post_meta($postId, '_wp_attachment_image_alt', $altText);
 }
 ?>
