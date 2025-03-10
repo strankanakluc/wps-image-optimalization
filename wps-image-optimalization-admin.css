@@ -2,8 +2,8 @@
 
 /* General Styles */
 .wrap h1 {
-  font-size: 2.5em;
   color: #0073aa;
+  font-size: 2.5em;
   font-weight: bold;
   text-align: center;
 }
@@ -11,17 +11,17 @@
 .wrap form {
   background-color: #fff;
   border: 1px solid #ccd0d4;
-  padding: 20px;
   border-radius: 5px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Added leading zero */
-  max-width: 800px;
   margin: 0 auto;
+  max-width: 800px;
+  padding: 20px;
 }
 
 /* Labels */
 .wrap label {
-  font-weight: bold;
   display: block;
+  font-weight: bold;
   margin-bottom: 5px;
 }
 
@@ -38,10 +38,10 @@
 
 /* Descriptions */
 .description {
-  font-style: italic;
   color: #555;
-  margin-top: -10px;
+  font-style: italic;
   margin-bottom: 15px;
+  margin-top: -10px;
 }
 
 /* Settings Sections */
@@ -51,11 +51,11 @@
 
 /* Settings Fields */
 .wrap .form-table th {
-  width: 250px;
-  padding: 10px 15px;
   box-sizing: border-box; /* Added box-sizing to include padding in width */
-  vertical-align: top;
+  padding: 10px 15px;
   text-align: left;
+  vertical-align: top;
+  width: 250px;
 }
 
 .wrap .form-table td {
