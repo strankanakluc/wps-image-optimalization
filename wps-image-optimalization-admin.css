@@ -13,7 +13,7 @@
   border: 1px solid #ccd0d4;
   padding: 20px;
   border-radius: 5px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, .1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Added leading zero */
   max-width: 800px;
   margin: 0 auto;
 }
@@ -45,7 +45,7 @@
 }
 
 /* Settings Sections */
-#wps_image_optimalization_main_settings {
+.wps-image-optimalization-main-settings { /* Changed from ID to class */
   margin-bottom: 20px;
 }
 
@@ -53,6 +53,7 @@
 .wrap .form-table th {
   width: 250px;
   padding: 10px 15px;
+  box-sizing: border-box; /* Added box-sizing to include padding in width */
   vertical-align: top;
   text-align: left;
 }
