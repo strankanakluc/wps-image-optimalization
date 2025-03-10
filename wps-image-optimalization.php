@@ -6,38 +6,41 @@
  * Author: WPS
  * Author URI: https://wps.sk
  * Version: 1.1.0
- * License: GPL v3
  * @category Plugin
  * @package WPS_Image_Optimalization
  * @link https://wps.sk
- * 
  * @license GPL v3
  */
 
 // Add menu item to Settings
-add_action('admin_menu', 'Wps_Image_Optimalization_Menu');
+add_action('admin_menu', 'Wps_Image_Optimalization_menu');
 
-function Wps_Image_Optimalization_Menu()
+/**
+ * Add menu item to Settings
+ *
+ * @return void
+ */
+function Wps_Image_Optimalization_menu()
 {
     add_options_page(
         'Wps Image Optimalization Settings',
         'Wps Image Optimalization',
         'manage_options',
         'wps-image-optimalization',
-        'Wps_Image_Optimalization_Settings_Page'
+        'Wps_Image_Optimalization_Settings_page'
     );
 }
 
 // Enqueue admin styles
-add_action('admin_enqueue_scripts', 'Wps_Image_Optimalization_Enqueue_Admin_Styles');
+add_action('admin_enqueue_scripts', 'Wps_Image_Optimalization_Enqueue_Admin_styles');
 
 /**
  * Enqueue admin styles
  *
- * @param string $hookSuffix
+ * @param string $hookSuffix The suffix for the hook
  * @return void
  */
-function Wps_Image_Optimalization_Enqueue_Admin_Styles($hookSuffix)
+function Wps_Image_Optimalization_Enqueue_Admin_styles($hookSuffix)
 {
     if ($hookSuffix == 'settings_page_wps-image-optimalization') {
         wp_enqueue_style('wps-image-optimalization-admin', plugin_dir_url(__FILE__) . 'wps-image-optimalization-admin.css');
@@ -45,28 +48,28 @@ function Wps_Image_Optimalization_Enqueue_Admin_Styles($hookSuffix)
 }
 
 // Register settings
-add_action('admin_init', 'Wps_Image_Optimalization_Settings_Init');
+add_action('admin_init', 'Wps_Image_Optimalization_Settings_init');
 
 /**
  * Register settings
  *
  * @return void
  */
-function Wps_Image_Optimalization_Settings_Init()
+function Wps_Image_Optimalization_Settings_init()
 {
     register_setting('wps_image_optimalization_settings', 'wps_image_optimalization_settings');
 
     add_settings_section(
         'wps_image_optimalization_main_settings',
         __('Settings', 'wps-image-optimalization'),
-        'Wps_Image_Optimalization_Section_Callback',
+        'Wps_Image_Optimalization_Section_callback',
         'wps_image_optimalization_settings'
     );
 
     add_settings_field(
         'retain_original',
         __('Also keep the original image', 'wps-image-optimalization'),
-        'Wps_Image_Optimalization_Retain_Original_Render',
+        'Wps_Image_Optimalization_Retain_Original_render',
         'wps_image_optimalization_settings',
         'wps_image_optimalization_main_settings'
     );
@@ -74,7 +77,7 @@ function Wps_Image_Optimalization_Settings_Init()
     add_settings_field(
         'quality',
         __('Image Quality', 'wps-image-optimalization'),
-        'Wps_Image_Optimalization_Quality_Render',
+        'Wps_Image_Optimalization_Quality_render',
         'wps_image_optimalization_settings',
         'wps_image_optimalization_main_settings'
     );
@@ -82,7 +85,7 @@ function Wps_Image_Optimalization_Settings_Init()
     add_settings_field(
         'method',
         __('Compression Method', 'wps-image-optimalization'),
-        'Wps_Image_Optimalization_Method_Render',
+        'Wps_Image_Optimalization_Method_render',
         'wps_image_optimalization_settings',
         'wps_image_optimalization_main_settings'
     );
@@ -90,7 +93,7 @@ function Wps_Image_Optimalization_Settings_Init()
     add_settings_field(
         'allowed_types',
         __('Allowed Image Types', 'wps-image-optimalization'),
-        'Wps_Image_Optimalization_Allowed_Types_Render',
+        'Wps_Image_Optimalization_Allowed_Types_render',
         'wps_image_optimalization_settings',
         'wps_image_optimalization_main_settings'
     );
@@ -98,7 +101,7 @@ function Wps_Image_Optimalization_Settings_Init()
     add_settings_field(
         'set_alt_text',
         __('Copy file name to alt text', 'wps-image-optimalization'),
-        'Wps_Image_Optimalization_Set_Alt_Text_Render',
+        'Wps_Image_Optimalization_Set_Alt_Text_render',
         'wps_image_optimalization_settings',
         'wps_image_optimalization_main_settings'
     );
@@ -106,7 +109,7 @@ function Wps_Image_Optimalization_Settings_Init()
     add_settings_field(
         'max_width',
         __('Maximum Image Width', 'wps-image-optimalization'),
-        'Wps_Image_Optimalization_Max_Width_Render',
+        'Wps_Image_Optimalization_Max_Width_render',
         'wps_image_optimalization_settings',
         'wps_image_optimalization_main_settings'
     );
@@ -117,7 +120,7 @@ function Wps_Image_Optimalization_Settings_Init()
  *
  * @return void
  */
-function Wps_Image_Optimalization_Section_Callback()
+function Wps_Image_Optimalization_Section_callback()
 {
     echo '<p>' . __('Optimizes images when uploading. Define the maximum image size and choose which file types should be converted to webp and what the compression or quality of the optimized image should be.', 'wps-image-optimalization') . '</p>';
 }
@@ -127,7 +130,7 @@ function Wps_Image_Optimalization_Section_Callback()
  *
  * @return void
  */
-function Wps_Image_Optimalization_Retain_Original_Render()
+function Wps_Image_Optimalization_Retain_Original_render()
 {
     $options = get_option('wps_image_optimalization_settings');
     ?>
@@ -144,7 +147,7 @@ function Wps_Image_Optimalization_Retain_Original_Render()
  *
  * @return void
  */
-function Wps_Image_Optimalization_Quality_Render()
+function Wps_Image_Optimalization_Quality_render()
 {
     $options = get_option('wps_image_optimalization_settings');
     $quality = isset($options['quality']) ? intval($options['quality']) : 80;
@@ -162,7 +165,7 @@ function Wps_Image_Optimalization_Quality_Render()
  *
  * @return void
  */
-function Wps_Image_Optimalization_Method_Render()
+function Wps_Image_Optimalization_Method_render()
 {
     $options = get_option('wps_image_optimalization_settings');
     $method = isset($options['method']) ? intval($options['method']) : 6;
@@ -180,7 +183,7 @@ function Wps_Image_Optimalization_Method_Render()
  *
  * @return void
  */
-function Wps_Image_Optimalization_Allowed_Types_Render()
+function Wps_Image_Optimalization_Allowed_Types_render()
 {
     $options = get_option('wps_image_optimalization_settings');
     $allowedTypes = isset($options['allowed_types']) ? $options['allowed_types'] : ['image/jpeg', 'image/png', 'image/gif'];
@@ -206,7 +209,7 @@ function Wps_Image_Optimalization_Allowed_Types_Render()
  *
  * @return void
  */
-function Wps_Image_Optimalization_Set_Alt_Text_Render()
+function Wps_Image_Optimalization_Set_Alt_Text_render()
 {
     $options = get_option('wps_image_optimalization_settings');
     ?>
@@ -223,7 +226,7 @@ function Wps_Image_Optimalization_Set_Alt_Text_Render()
  *
  * @return void
  */
-function Wps_Image_Optimalization_Max_Width_Render()
+function Wps_Image_Optimalization_Max_Width_render()
 {
     $options = get_option('wps_image_optimalization_settings');
     $maxWidth = isset($options['max_width']) ? intval($options['max_width']) : 1200;
@@ -241,7 +244,7 @@ function Wps_Image_Optimalization_Max_Width_Render()
  *
  * @return void
  */
-function Wps_Image_Optimalization_Settings_Page()
+function Wps_Image_Optimalization_Settings_page()
 {
     ?>
     <div class="wrap">
@@ -260,10 +263,10 @@ function Wps_Image_Optimalization_Settings_Page()
 /**
  * Disable WordPress default image sizes and back-sizing
  *
- * @param array $sizes
+ * @param array $sizes The sizes of the images
  * @return array
  */
-function Disable_Default_Image_Sizes($sizes)
+function Disable_Default_Image_sizes($sizes)
 {
     unset($sizes['thumbnail']);      // Remove Thumbnail size
     unset($sizes['medium']);         // Remove Medium size
@@ -272,19 +275,19 @@ function Disable_Default_Image_Sizes($sizes)
     // Note: 'full' represents the original upload size and cannot be removed here.
     return $sizes;
 }
-add_filter('intermediate_image_sizes_advanced', 'Disable_Default_Image_Sizes');
+add_filter('intermediate_image_sizes_advanced', 'Disable_Default_Image_sizes');
 
 /**
  * Disable additional image sizes
  *
  * @return void
  */
-function Disable_Additional_Image_Sizes()
+function Disable_Additional_Image_sizes()
 {
     remove_image_size('1536x1536');  // Remove 2x medium-large size
     remove_image_size('2048x2048');  // Remove 2x large size
 }
-add_action('init', 'Disable_Additional_Image_Sizes');
+add_action('init', 'Disable_Additional_Image_sizes');
 
 add_filter('big_image_size_threshold', '__return_false'); // Disable big image scaling
 
@@ -293,15 +296,15 @@ if (!isset($content_width)) {
 }
 
 // Hook into the image upload process to convert images to WebP
-add_filter('wp_handle_upload', 'Wps_Image_Optimalization_Handle_Upload');
+add_filter('wp_handle_upload', 'Wps_Image_Optimalization_Handle_upload');
 
 /**
  * Convert images to WebP upon upload
  *
- * @param array $upload
+ * @param array $upload The uploaded file
  * @return array
  */
-function Wps_Image_Optimalization_Handle_Upload($upload)
+function Wps_Image_Optimalization_Handle_upload($upload)
 {
     $options = get_option('wps_image_optimalization_settings');
     $retainOriginal = isset($options['retain_original']) ? $options['retain_original'] : false;
@@ -386,15 +389,15 @@ function Wps_Image_Optimalization_Handle_Upload($upload)
 }
 
 // Hook into the image upload process to set alt text
-add_action('add_attachment', 'Wps_Image_Optimalization_Set_Image_Alt_Text_On_Upload');
+add_action('add_attachment', 'Wps_Image_Optimalization_Set_Image_Alt_Text_On_upload');
 
 /**
  * Set image alt text based on filename
  *
- * @param int $postId
+ * @param int $postId The post ID
  * @return void
  */
-function Wps_Image_Optimalization_Set_Image_Alt_Text_On_Upload($postId)
+function Wps_Image_Optimalization_Set_Image_Alt_Text_On_upload($postId)
 {
     // Get the plugin settings
     $options = get_option('wps_image_optimalization_settings');
