@@ -1,56 +1,56 @@
 <?php
-/*
-Plugin Name: WPS Image Optimalization
-Plugin URI: 
-Description: Optimizes images when uploading. Define the maximum image size and choose which file types should be converted to webp and what the compression or quality of the optimized image should be.
-Author: WPS
-Author URI: https://wps.sk
-Version: 1.1.0
-License: GPL v3
-*/
+/**
+ * Plugin Name: WPS Image Optimalization
+ * Plugin URI: 
+ * Description: Optimizes images when uploading. Define the maximum image size and choose which file types should be converted to webp and what the compression or quality of the optimized image should be.
+ * Author: WPS
+ * Author URI: https://wps.sk
+ * Version: 1.1.0
+ * License: GPL v3
+ */
 
 // Add menu item to Settings
-add_action('admin_menu', 'wps_image_optimalization_menu');
+add_action('admin_menu', 'wpsImageOptimalizationMenu');
 
-function wps_image_optimalization_menu()
+function wpsImageOptimalizationMenu()
 {
     add_options_page(
         'Wps Image Optimalization Settings',
         'Wps Image Optimalization',
         'manage_options',
         'wps-image-optimalization',
-        'wps_image_optimalization_settings_page'
+        'wpsImageOptimalizationSettingsPage'
     );
 }
 
 // Enqueue admin styles
-add_action('admin_enqueue_scripts', 'wps_image_optimalization_enqueue_admin_styles');
+add_action('admin_enqueue_scripts', 'wpsImageOptimalizationEnqueueAdminStyles');
 
-function wps_image_optimalization_enqueue_admin_styles($hook_suffix)
+function wpsImageOptimalizationEnqueueAdminStyles($hookSuffix)
 {
-    if ($hook_suffix == 'settings_page_wps-image-optimalization') {
+    if ($hookSuffix == 'settings_page_wps-image-optimalization') {
         wp_enqueue_style('wps-image-optimalization-admin', plugin_dir_url(__FILE__) . 'wps-image-optimalization-admin.css');
     }
 }
 
 // Register settings
-add_action('admin_init', 'wps_image_optimalization_settings_init');
+add_action('admin_init', 'wpsImageOptimalizationSettingsInit');
 
-function wps_image_optimalization_settings_init()
+function wpsImageOptimalizationSettingsInit()
 {
     register_setting('wps_image_optimalization_settings', 'wps_image_optimalization_settings');
 
     add_settings_section(
         'wps_image_optimalization_main_settings',
         __('Settings', 'wps-image-optimalization'),
-        'wps_image_optimalization_section_callback',
+        'wpsImageOptimalizationSectionCallback',
         'wps_image_optimalization_settings'
     );
 
     add_settings_field(
         'retain_original',
         __('Also keep the original image', 'wps-image-optimalization'),
-        'wps_image_optimalization_retain_original_render',
+        'wpsImageOptimalizationRetainOriginalRender',
         'wps_image_optimalization_settings',
         'wps_image_optimalization_main_settings'
     );
@@ -58,7 +58,7 @@ function wps_image_optimalization_settings_init()
     add_settings_field(
         'quality',
         __('Image Quality', 'wps-image-optimalization'),
-        'wps_image_optimalization_quality_render',
+        'wpsImageOptimalizationQualityRender',
         'wps_image_optimalization_settings',
         'wps_image_optimalization_main_settings'
     );
@@ -66,7 +66,7 @@ function wps_image_optimalization_settings_init()
     add_settings_field(
         'method',
         __('Compression Method', 'wps-image-optimalization'),
-        'wps_image_optimalization_method_render',
+        'wpsImageOptimalizationMethodRender',
         'wps_image_optimalization_settings',
         'wps_image_optimalization_main_settings'
     );
@@ -74,7 +74,7 @@ function wps_image_optimalization_settings_init()
     add_settings_field(
         'allowed_types',
         __('Allowed Image Types', 'wps-image-optimalization'),
-        'wps_image_optimalization_allowed_types_render',
+        'wpsImageOptimalizationAllowedTypesRender',
         'wps_image_optimalization_settings',
         'wps_image_optimalization_main_settings'
     );
@@ -82,7 +82,7 @@ function wps_image_optimalization_settings_init()
     add_settings_field(
         'set_alt_text',
         __('Copy file name to alt text', 'wps-image-optimalization'),
-        'wps_image_optimalization_set_alt_text_render',
+        'wpsImageOptimalizationSetAltTextRender',
         'wps_image_optimalization_settings',
         'wps_image_optimalization_main_settings'
     );
@@ -90,18 +90,18 @@ function wps_image_optimalization_settings_init()
     add_settings_field(
         'max_width',
         __('Maximum Image Width', 'wps-image-optimalization'),
-        'wps_image_optimalization_max_width_render',
+        'wpsImageOptimalizationMaxWidthRender',
         'wps_image_optimalization_settings',
         'wps_image_optimalization_main_settings'
     );
 }
 
-function wps_image_optimalization_section_callback()
+function wpsImageOptimalizationSectionCallback()
 {
     echo '<p>' . __('Optimizes images when uploading. Define the maximum image size and choose which file types should be converted to webp and what the compression or quality of the optimized image should be.', 'wps-image-optimalization') . '</p>';
 }
 
-function wps_image_optimalization_retain_original_render()
+function wpsImageOptimalizationRetainOriginalRender()
 {
     $options = get_option('wps_image_optimalization_settings');
     ?>
@@ -113,7 +113,7 @@ function wps_image_optimalization_retain_original_render()
     <?php
 }
 
-function wps_image_optimalization_quality_render()
+function wpsImageOptimalizationQualityRender()
 {
     $options = get_option('wps_image_optimalization_settings');
     $quality = isset($options['quality']) ? intval($options['quality']) : 80;
@@ -126,7 +126,7 @@ function wps_image_optimalization_quality_render()
     <?php
 }
 
-function wps_image_optimalization_method_render()
+function wpsImageOptimalizationMethodRender()
 {
     $options = get_option('wps_image_optimalization_settings');
     $method = isset($options['method']) ? intval($options['method']) : 6;
@@ -139,7 +139,7 @@ function wps_image_optimalization_method_render()
     <?php
 }
 
-function wps_image_optimalization_allowed_types_render()
+function wpsImageOptimalizationAllowedTypesRender()
 {
     $options = get_option('wps_image_optimalization_settings');
     $allowed_types = isset($options['allowed_types']) ? $options['allowed_types'] : ['image/jpeg', 'image/png', 'image/gif'];
@@ -160,7 +160,7 @@ function wps_image_optimalization_allowed_types_render()
     <?php
 }
 
-function wps_image_optimalization_set_alt_text_render()
+function wpsImageOptimalizationSetAltTextRender()
 {
     $options = get_option('wps_image_optimalization_settings');
     ?>
@@ -172,7 +172,7 @@ function wps_image_optimalization_set_alt_text_render()
     <?php
 }
 
-function wps_image_optimalization_max_width_render()
+function wpsImageOptimalizationMaxWidthRender()
 {
     $options = get_option('wps_image_optimalization_settings');
     $max_width = isset($options['max_width']) ? intval($options['max_width']) : 1200;
@@ -185,7 +185,7 @@ function wps_image_optimalization_max_width_render()
     <?php
 }
 
-function wps_image_optimalization_settings_page()
+function wpsImageOptimalizationSettingsPage()
 {
     ?>
     <div class="wrap">
@@ -202,7 +202,7 @@ function wps_image_optimalization_settings_page()
 }
 
 // Disable WordPress default image sizes and back-sizing
-function disable_default_image_sizes($sizes)
+function disableDefaultImageSizes($sizes)
 {
     unset($sizes['thumbnail']);      // Remove Thumbnail size
     unset($sizes['medium']);         // Remove Medium size
@@ -211,14 +211,14 @@ function disable_default_image_sizes($sizes)
     // Note: 'full' represents the original upload size and cannot be removed here.
     return $sizes;
 }
-add_filter('intermediate_image_sizes_advanced', 'disable_default_image_sizes');
+add_filter('intermediate_image_sizes_advanced', 'disableDefaultImageSizes');
 
-function disable_additional_image_sizes()
+function disableAdditionalImageSizes()
 {
     remove_image_size('1536x1536');  // Remove 2x medium-large size
     remove_image_size('2048x2048');  // Remove 2x large size
 }
-add_action('init', 'disable_additional_image_sizes');
+add_action('init', 'disableAdditionalImageSizes');
 
 add_filter('big_image_size_threshold', '__return_false'); // Disable big image scaling
 
@@ -227,9 +227,9 @@ if (!isset($content_width)) {
 }
 
 // Hook into the image upload process to convert images to WebP
-add_filter('wp_handle_upload', 'wps_image_optimalization_handle_upload');
+add_filter('wp_handle_upload', 'wpsImageOptimalizationHandleUpload');
 
-function wps_image_optimalization_handle_upload($upload)
+function wpsImageOptimalizationHandleUpload($upload)
 {
     $options = get_option('wps_image_optimalization_settings');
     $retain_original = isset($options['retain_original']) ? $options['retain_original'] : false;
@@ -313,9 +313,9 @@ function wps_image_optimalization_handle_upload($upload)
 }
 
 // Hook into the image upload process to set alt text
-add_action('add_attachment', 'wps_image_optimalization_set_image_alt_text_on_upload');
+add_action('add_attachment', 'wpsImageOptimalizationSetImageAltTextOnUpload');
 
-function wps_image_optimalization_set_image_alt_text_on_upload($postId)
+function wpsImageOptimalizationSetImageAltTextOnUpload($postId)
 {
     // Get the plugin settings
     $options = get_option('wps_image_optimalization_settings');
