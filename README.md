@@ -1,4 +1,8 @@
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/f1f87b64a2474aa7bbd1b62007d17c8b)](https://app.codacy.com/gh/strankanakluc/wps-image-optimalization/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
+[![WordPress Plugin Version](https://img.shields.io/wordpress/plugin/v/wps-image-optimalization)](https://wordpress.org/plugins/wps-image-optimalization/)
+[![WordPress Plugin: Tested WP Version](https://img.shields.io/wordpress/plugin/tested/wps-image-optimalization)](https://wordpress.org/plugins/wps-image-optimalization/)
+[![WordPress Plugin Rating](https://img.shields.io/wordpress/plugin/stars/wps-image-optimalization)](https://wordpress.org/plugins/wps-image-optimalization/)
+[![WordPress Plugin Active Installs](https://img.shields.io/wordpress/plugin/installs/wps-image-optimalization)](https://wordpress.org/plugins/wps-image-optimalization/)
 # WPS Image Optimalization
 
 **Contributors:** WPS  
