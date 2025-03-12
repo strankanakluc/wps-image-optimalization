@@ -8,10 +8,10 @@
 **Contributors:** WPS  
 **Tags:** images, optimization, webp, compression  
 **Requires at least:** 5.0  
-**Tested up to:** 5.8  
+**Tested up to:** 6.7 
 **Stable tag:** 1.1.0  
-**License:** GPL v3  
-**License URI:** https://www.gnu.org/licenses/gpl-3.0.html  
+**License:** GPL-2.0+ 
+**License URI:** https://www.gnu.org/licenses/gpl-2.0.html
 
 ## Description
 
